@@ -16,47 +16,41 @@ namespace HapticGUIAuto
     {
         bool reverseSignals = false;
 
-        private int[] trialAngles = { 
-            135, 45, 90, 0, 180, 270, 225, 315, 
-            180, 90, 270, 135, 0, 315, 225, 45, 
-            315, 225, 0, 270, 135, 180, 45, 90, 
-            315, 180, 0, 45, 225, 135, 270, 90, 
-            270, 135, 180, 45, 225, 0, 315, 90, 
-            270, 90, 135, 180, 225, 315, 0, 45, 
-            225, 90, 0, 135, 45, 180, 270, 315, 
-            180, 45, 270, 135, 315, 0, 90, 225, 
-            135, 315, 0, 90, 180, 45, 270, 225, 
-            0, 225, 45, 180, 90, 315, 135, 270
+        private string[] trialDirections =
+        {
+            "U", "F", "L", "R", "D", "B",
+            "U", "D", "L", "R", "F", "B", 
+            "L", "B", "F", "D", "R", "U", 
+            "D", "R", "L", "F", "U", "B", 
+            "F", "L", "D", "U", "R", "B", 
+            "R", "L", "F", "B", "U", "D", 
+            "F", "U", "D", "R", "L", "B", 
+            "U", "R", "D", "L", "F", "B", 
+            "R", "L", "B", "D", "U", "F", 
+            "U", "D", "F", "B", "L", "R"
         };
 
-        private string[] stateNames = { "Idle", "Playing", "Paused", "Playing", "Waiting" };
-        private int[] stateCountdowns = { 5, 5, 2, 5, 100 };
-        // private int[] stateCountdowns = { 0, 0, 0, 0, 100 };
+        private string[] stateNames = { "Playing", "Paused", "Playing", "Waiting" };
+        private int[] stateCountdowns = { 5, 2, 5, 100 };
+        // private int[] stateCountdowns = { 0, 0, 0, 100 };
         private int stateIdx = 0;
 
-        const string introMsg = "A sample haptic feedback will now be played twice with a 2 second interval after which you will be asked to identify the direction of the push or pull.";
+        const string introMsg = "A sample haptic feedback will be played twice with a 2 second interval after which you will be asked to identify the direction of the push or pull.";
 
         int countdown = 0;
 
-        string participantId, session, comPort;
+        string participantId, session;
         int trialNumber;
 
         SoundPlayer posSound, negSound;
 
-        SerialPort serialPort;
-
-        public TaskWindow(string participantId, string session, int trialNumber, string comPort)
+        public TaskWindow(string participantId, string session, int trialNumber)
         {
             InitializeComponent();
 
             this.participantId = participantId;
             this.session = session;
             this.trialNumber = trialNumber;
-            this.comPort = comPort;
-
-            serialPort = new SerialPort();
-            serialPort.BaudRate = 9600;
-            serialPort.PortName = comPort;
 
             timer.Stop();
 
@@ -69,7 +63,8 @@ namespace HapticGUIAuto
 
             lblInstructions.Text = introMsg;
 
-            pipeline();
+            lblStatus.Text = "Waiting";
+            lblTimer.Text = "-";
         }
 
         // Pass argument "true" to play positive signal, "false" to play negative signal
@@ -94,13 +89,32 @@ namespace HapticGUIAuto
             }
         }
 
-        private void playSound(int angle)
+        /*
+         * Direction Mapping
+         * 'F': Forward     => Negative
+         * 'B': Backward    => Positive
+         * 'L': Left        => Positive
+         * 'R': Right       => Negative
+         * 'U': Up          => Negative
+         * 'D': Down        => Positive
+         */
+        private void playSound(string direction)
         {
             bool isPositive = false;
-            if (angle < 180)
+            if (direction == "B" || direction == "L" || direction == "D")
             {
                 isPositive = true;
             }
+            else
+            {
+                isPositive = false;
+            }
+
+            if (reverseSignals)
+            {
+                isPositive = !isPositive;
+            }
+
             playSound(isPositive);
         }
 
@@ -110,16 +124,22 @@ namespace HapticGUIAuto
             negSound.Stop();
         }
 
+        private void startBtn_Click(object sender, EventArgs e)
+        {
+            startBtn.Enabled = false;
+            pipeline();
+        }
+
         private void backBtn_Click(object sender, EventArgs e)
         {
             if (trialNumber == 0)
             {
-                backBtn.Visible = false;
+                backBtn.Enabled = false;
             }
             else
             {
                 var newTrialNumber = trialNumber - 1;
-                DirectionSelectionWindow directionSelectionWindow = new DirectionSelectionWindow(participantId, session, newTrialNumber, trialAngles[newTrialNumber], comPort);
+                DirectionSelectionWindow directionSelectionWindow = new DirectionSelectionWindow(participantId, session, newTrialNumber, trialDirections[newTrialNumber]);
                 this.Hide();
                 directionSelectionWindow.ShowDialog();
                 this.Close();
@@ -144,42 +164,26 @@ namespace HapticGUIAuto
         private void pipeline()
         {
             stopSound();
-            if (stateIdx != 4)
+            if (stateIdx != 3)
             {
                 countdown = stateCountdowns[stateIdx];
                 lblTimer.Text = countdown.ToString();
                 lblStatus.Text = stateNames[stateIdx];
 
-                if (stateNames[stateIdx] == "Idle")
-                {
-                    rotateDevice(trialAngles[trialNumber]);
-                }
-
                 if (stateNames[stateIdx] == "Playing")
                 {
-                    playSound(trialAngles[trialNumber]);
+                    playSound(trialDirections[trialNumber]);
                 }
 
                 timer.Start();
             }
             else
             {
-                DirectionSelectionWindow directionSelectionWindow = new DirectionSelectionWindow(participantId, session, trialNumber, trialAngles[trialNumber], comPort);
+                DirectionSelectionWindow directionSelectionWindow = new DirectionSelectionWindow(participantId, session, trialNumber, trialDirections[trialNumber]);
                 this.Hide();
                 directionSelectionWindow.ShowDialog();
                 this.Close();
             }
-        }
-
-        private void rotateDevice(int angle)
-        {
-            if (angle > 180)
-            {
-                angle = angle - 180;
-            }            
-            serialPort.Open();
-            serialPort.Write(angle.ToString());
-            serialPort.Close();
         }
 
     }

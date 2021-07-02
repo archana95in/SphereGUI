@@ -14,21 +14,20 @@ namespace HapticGUIAuto
     {
         private int countdown = 0;
 
-        string participantId, session, comPort;
+        string participantId, session;
         int trialNumber;
 
-        public PauseWindow(string participantId, string session, int trialNumber, string comPort)
+        public PauseWindow(string participantId, string session, int trialNumber)
         {
             InitializeComponent();
 
             this.participantId = participantId;
             this.session = session;
             this.trialNumber = trialNumber;
-            this.comPort = comPort;
 
             restTimer.Stop();
 
-            if (this.trialNumber != 80)
+            if (this.trialNumber != 60)
             {
                 countdown = 120;
                 lblRestTimer.Text = countdown.ToString();
@@ -40,11 +39,6 @@ namespace HapticGUIAuto
                 lblRestInstructions.Text = "This is the end of the experiment. Thank you for participating!";
                 lblRestTimer.Text = "";
             }
-        }
-
-        private void PauseWindow_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void restTimer_Tick(object sender, EventArgs e)
@@ -63,7 +57,7 @@ namespace HapticGUIAuto
 
         private void continueExperiment()
         {
-            TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber, comPort);
+            TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber);
             this.Hide();
             taskWindow.ShowDialog();
             this.Close();

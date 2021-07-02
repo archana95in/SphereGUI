@@ -24,10 +24,10 @@ namespace HapticGUIAuto
 
         bool isClicked = false;
 
-        string participantId, session, comPort;
-        int trialNumber, groundTruth;
+        string participantId, session, groundTruth;
+        int trialNumber;
 
-        public DirectionSelectionWindow(string participantId, string session, int trialNumber, int groundTruth, string comPort)
+        public DirectionSelectionWindow(string participantId, string session, int trialNumber, string groundTruth)
         {
             InitializeComponent();
 
@@ -35,7 +35,6 @@ namespace HapticGUIAuto
             this.session = session;
             this.trialNumber = trialNumber;
             this.groundTruth = groundTruth;
-            this.comPort = comPort;
         }
 
         // --------------------------------------------------------------------
@@ -54,28 +53,50 @@ namespace HapticGUIAuto
 
             if (result != -1)
             {
-                if (!File.Exists(filename))
-                {
-                    File.WriteAllText(filename, header);
-                }
-                var record = participantId + "," + session + "," + (trialNumber + 1) + "," + getTime() + "," + groundTruth + "," + result + "\n";
-                File.AppendAllText(filename, record);
+                if (Convert.ToInt32(result) == 0)
+                    writeResult("R");
+                else if (Convert.ToInt32(result) == 1)
+                    writeResult("B");
+                else if (Convert.ToInt32(result) == 2)
+                    writeResult("L");
+                else if (Convert.ToInt32(result) == 3)
+                    writeResult("F");
+            }
+        }
 
-                trialNumber += 1;
-                if (trialNumber % 16 != 0)
-                {
-                    TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber, comPort);
-                    this.Hide();
-                    taskWindow.ShowDialog();
-                    this.Close();
-                }
-                else
-                {
-                    PauseWindow pauseWindow = new PauseWindow(participantId, session, trialNumber, comPort);
-                    this.Hide();
-                    pauseWindow.ShowDialog();
-                    this.Close();
-                }
+        private void upBtn_Click(object sender, EventArgs e)
+        {
+            writeResult("U");
+        }
+
+        private void downBtn_Click(object sender, EventArgs e)
+        {
+            writeResult("D");
+        }
+
+        private void writeResult(string result)
+        {
+            if (!File.Exists(filename))
+            {
+                File.WriteAllText(filename, header);
+            }
+            var record = participantId + "," + session + "," + (trialNumber + 1) + "," + getTime() + "," + groundTruth + "," + result + "\n";
+            File.AppendAllText(filename, record);
+
+            trialNumber += 1;
+            if (trialNumber % 12 != 0)
+            {
+                TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber);
+                this.Hide();
+                taskWindow.ShowDialog();
+                this.Close();
+            }
+            else
+            {
+                PauseWindow pauseWindow = new PauseWindow(participantId, session, trialNumber);
+                this.Hide();
+                pauseWindow.ShowDialog();
+                this.Close();
             }
         }
 
@@ -86,15 +107,10 @@ namespace HapticGUIAuto
 
         private void btnPlayAgain_Click(object sender, EventArgs e)
         {
-            TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber, comPort);
+            TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber);
             this.Hide();
             taskWindow.ShowDialog();
             this.Close();
-        }
-
-        private void DirectionSelectionWindow_Load(object sender, EventArgs e)
-        {
-
         }
 
         // --------------------------------------------------------------------

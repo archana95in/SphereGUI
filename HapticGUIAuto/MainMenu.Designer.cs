@@ -36,13 +36,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tbTrialNumber = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbComPort = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(345, 367);
+            this.btnStart.Location = new System.Drawing.Point(345, 318);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(176, 49);
             this.btnStart.TabIndex = 0;
@@ -112,30 +110,11 @@
             this.tbTrialNumber.Text = "1";
             this.tbTrialNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbTrialNumber_KeyPress);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(70, 309);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(139, 32);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "COM Port";
-            // 
-            // tbComPort
-            // 
-            this.tbComPort.Location = new System.Drawing.Point(222, 306);
-            this.tbComPort.Name = "tbComPort";
-            this.tbComPort.Size = new System.Drawing.Size(299, 38);
-            this.tbComPort.TabIndex = 8;
-            this.tbComPort.Text = "COM10";
-            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 448);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.tbComPort);
+            this.ClientSize = new System.Drawing.Size(574, 403);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbTrialNumber);
             this.Controls.Add(this.label3);
@@ -164,7 +143,5 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbTrialNumber;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbComPort;
     }
 }

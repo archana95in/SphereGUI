@@ -26,7 +26,6 @@ namespace HapticGUIAuto
         {
             string participantId = tbParticipantId.Text;
             string session = tbSession.Text;
-            string comPort = tbComPort.Text;
 
             int trialNumber;
             try
@@ -38,7 +37,7 @@ namespace HapticGUIAuto
                 trialNumber = 0;
             }
 
-            if (trialNumber < 0 || trialNumber > 79)
+            if (trialNumber < 0 || trialNumber > 59)
             {
                 MessageBox.Show("ERROR: Trial Number Out Of Range");
             }
@@ -50,39 +49,13 @@ namespace HapticGUIAuto
             {
                 MessageBox.Show("ERROR: Session Cannot Be Empty");
             }
-            else if (!checkComPort(comPort))
-            {
-                MessageBox.Show("ERROR: Invalid COM Port");
-            }
             else
             {
-                TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber, comPort);
+                TaskWindow taskWindow = new TaskWindow(participantId, session, trialNumber);
                 this.Hide();
                 taskWindow.ShowDialog();
                 this.Close();
             }
-        }
-
-        private bool checkComPort(string comPort)
-        {
-            bool isValid = false;
-            try
-            {
-                SerialPort serialPort = new SerialPort();
-                serialPort.BaudRate = 9600;
-                serialPort.PortName = comPort;
-                serialPort.Open();
-                serialPort.Write("0");
-                serialPort.Close();
-
-                isValid = true;
-            }
-            catch (Exception)
-            {
-                isValid = false;
-            }
-
-            return isValid;
         }
 
         private void tbTrialNumber_KeyPress(object sender, KeyPressEventArgs e)

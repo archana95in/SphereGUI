@@ -70,7 +70,6 @@
             this.Name = "PauseWindow";
             this.Text = "Pause Window";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.PauseWindow_Load);
             this.ResumeLayout(false);
 
         }
