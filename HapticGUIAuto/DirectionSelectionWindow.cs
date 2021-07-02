@@ -18,7 +18,7 @@ namespace HapticGUIAuto
         private const string filename = "data.csv";
         private const string header = "Participant ID,Session,Trial Number,Timestamp,Ground Truth,Selected Direction\n";
 
-        string[] sliceDefaultColors = { "#AAAAAA", "#888888", "#AAAAAA", "#888888", "#AAAAAA", "#888888", "#AAAAAA", "#888888" };
+        string[] sliceDefaultColors = { "#AAAAAA", "#888888", "#AAAAAA", "#888888"};
         string hoverColor = "#7FDBFF";
         string clickColor = "#0074D9";
 
@@ -129,7 +129,7 @@ namespace HapticGUIAuto
             string assignColor = "";
             if (!isClicked)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     assignColor = sliceDefaultColors[i];
                     if (i == hitIdx)
@@ -151,7 +151,7 @@ namespace HapticGUIAuto
             {
                 isClicked = true;
                 string assignColor = "";
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     assignColor = sliceDefaultColors[i];
                     if (i == hit.PointIndex)
