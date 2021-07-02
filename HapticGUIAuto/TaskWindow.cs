@@ -34,7 +34,7 @@ namespace HapticGUIAuto
         // private int[] stateCountdowns = { 0, 0, 0, 0, 100 };
         private int stateIdx = 0;
 
-        const string introMsg = "A sample vibration will now be played twice with a 2 second interval after which you will be asked to identify the direction of the push or pull.";
+        const string introMsg = "A sample haptic feedback will now be played twice with a 2 second interval after which you will be asked to identify the direction of the push or pull.";
 
         int countdown = 0;
 
@@ -110,6 +110,22 @@ namespace HapticGUIAuto
             negSound.Stop();
         }
 
+        private void backBtn_Click(object sender, EventArgs e)
+        {
+            if (trialNumber == 0)
+            {
+                backBtn.Visible = false;
+            }
+            else
+            {
+                var newTrialNumber = trialNumber - 1;
+                DirectionSelectionWindow directionSelectionWindow = new DirectionSelectionWindow(participantId, session, newTrialNumber, trialAngles[newTrialNumber], comPort);
+                this.Hide();
+                directionSelectionWindow.ShowDialog();
+                this.Close();
+            }
+        }
+
         private void timer_Tick(object sender, EventArgs e)
         {
             if (countdown > 0)
@@ -157,6 +173,10 @@ namespace HapticGUIAuto
 
         private void rotateDevice(int angle)
         {
+            if (angle > 180)
+            {
+                angle = angle - 180;
+            }            
             serialPort.Open();
             serialPort.Write(angle.ToString());
             serialPort.Close();

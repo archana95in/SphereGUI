@@ -58,7 +58,7 @@ namespace HapticGUIAuto
                 {
                     File.WriteAllText(filename, header);
                 }
-                var record = participantId + "," + session + "," + trialNumber + "," + getTime() + "," + groundTruth + "," + result + "\n";
+                var record = participantId + "," + session + "," + (trialNumber + 1) + "," + getTime() + "," + groundTruth + "," + result + "\n";
                 File.AppendAllText(filename, record);
 
                 trialNumber += 1;
@@ -90,6 +90,11 @@ namespace HapticGUIAuto
             this.Hide();
             taskWindow.ShowDialog();
             this.Close();
+        }
+
+        private void DirectionSelectionWindow_Load(object sender, EventArgs e)
+        {
+
         }
 
         // --------------------------------------------------------------------

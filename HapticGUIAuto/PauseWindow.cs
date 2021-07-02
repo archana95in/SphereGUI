@@ -42,6 +42,11 @@ namespace HapticGUIAuto
             }
         }
 
+        private void PauseWindow_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void restTimer_Tick(object sender, EventArgs e)
         {
             if (countdown > 0)

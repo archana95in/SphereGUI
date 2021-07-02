@@ -43,6 +43,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.backBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -186,11 +187,22 @@
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // backBtn
+            // 
+            this.backBtn.Location = new System.Drawing.Point(478, 654);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(189, 52);
+            this.backBtn.TabIndex = 10;
+            this.backBtn.Text = "Go Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
             // TaskWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1160, 645);
+            this.ClientSize = new System.Drawing.Size(1160, 730);
+            this.Controls.Add(this.backBtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -198,6 +210,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "TaskWindow";
             this.Text = "Task Window";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -223,5 +236,6 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Button backBtn;
     }
 }
